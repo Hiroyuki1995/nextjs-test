@@ -1,42 +1,51 @@
 import Head from 'next/head'
 import Layout, { siteTitle } from '../components/layout'
 import utilStyles from '../styles/utils.module.css'
-// import { getSortedPostsData } from '../lib/posts'
+import { getSortedPostsData } from '../lib/posts'
 import { getBookData } from '../lib/books'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import { GetStaticProps } from 'next'
 
 // SSG（静的サイトジェネレーション）とSSR（サーバーサイドレンダリング）は
 // 同一ページで両方使うことはできない
 
-// export async function getStaticProps() {
-//   const allPostsData = getSortedPostsData()
+export const  getStaticProps: GetStaticProps = async () => {
+  const allPostsData = getSortedPostsData()
+  return {
+    props: {
+      allPostsData
+    }
+  }
+
+//   const allPostsData = await getBookData()
 //   return {
 //     props: {
 //       allPostsData
 //     }
 //   }
-
-// //   const allPostsData = await getBookData()
-// //   return {
-// //     props: {
-// //       allPostsData
-// //     }
-// //   }
-// }
-
-export async function getServerSideProps(context) {
-  //検索キーワード
-  const text = context.query.text;
-  const allBooksData = await getBookData(text)
-  return {
-    props: {
-      allBooksData
-    }
-  }
 }
 
-export default function Home ({ allBooksData }) {
+// export async function getServerSideProps(context) {
+//   //検索キーワード
+//   const text = context.query.text;
+//   const allBooksData = await getBookData(text)
+//   return {
+//     props: {
+//       allBooksData
+//     }
+//   }
+// }
+
+type Props = {
+  allPostsData: {
+    id: string
+    title: string
+    date: string
+  }[]
+}
+
+export default function Home ({ allPostsData }: Props) {
   const [text, setText] = useState('')
   const [csrResult, setCsrResult] = useState([])
   const [swrResult, setSwrResult] = useState([])
@@ -84,7 +93,7 @@ export default function Home ({ allBooksData }) {
           <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
         </p>
       </section>
-      {/* <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>
           {allPostsData.map(({ id, title, date}) => (
@@ -97,11 +106,11 @@ export default function Home ({ allBooksData }) {
             </li>
           ))}
         </ul>
-      </section> */}
+      </section>
       {/* <div>{swrResult}</div> */}
-      <input type="text" value={text} onChange={event => setText(event.target.value)}></input>
+      {/* <input type="text" value={text} onChange={event => setText(event.target.value)}></input> */}
       {/* <input type="button" value="SWR search" onClick={clickSWRButton}></input> */}
-      <input type="button" value="SSR search" onClick={clickSSRButton}></input>
+      {/* <input type="button" value="SSR search" onClick={clickSSRButton}></input>
       <input type="button" value="CSR search" onClick={clickCSRButton}></input>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>CSR result</h2>
@@ -116,11 +125,9 @@ export default function Home ({ allBooksData }) {
                 {volumeInfo.publishedDate}
               </li>
             )): ''}
-            {/* {test !== null ? 'not null' : 'null'} */}
-            {/* {() => {return test}} */}
         </ul>
-      </section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+      </section> */}
+      {/* <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>SSR result</h2>
         <ul className={utilStyles.list}>
           {allBooksData.map(({ id, volumeInfo}) => (
@@ -133,7 +140,7 @@ export default function Home ({ allBooksData }) {
             </li>
           ))}
         </ul>
-      </section>
+      </section> */}
     </Layout>
   )
 }
