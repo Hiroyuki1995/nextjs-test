@@ -5,10 +5,6 @@ import utilStyles from '../styles/utils.module.css'
 import { getBookData } from '../lib/books'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import useSWR from 'swr'
-import fetch from 'node-fetch'
-import Link from 'next/link'
-import Date from '../components/date'
 
 // SSG（静的サイトジェネレーション）とSSR（サーバーサイドレンダリング）は
 // 同一ページで両方使うことはできない
